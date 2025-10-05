@@ -25,4 +25,4 @@ A full-stack MERN application that analyzes invoice data compliance against the 
 
 This application uses MongoDB with automatic TTL expiration after 7 days.
 
-**Local MongoDB:**
+
