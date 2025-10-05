@@ -148,12 +148,12 @@ function StepThree({
                 >
                   <span>📥</span> Download Report
                 </button>
-                <button
+                {/* <button
                   onClick={copyShareLink}
                   className="px-5 py-2.5 bg-white/20 backdrop-blur-sm text-white rounded-lg hover:bg-white/30 transition-all font-medium shadow-md flex items-center gap-2"
                 >
                   <span>🔗</span> Copy Link
-                </button>
+                </button> */}
               </div>
             </div>
           </div>

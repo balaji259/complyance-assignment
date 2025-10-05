@@ -1,136 +1,87 @@
-
-const API_BASE = import.meta.env.VITE_API_BASE;
+import api from '../axiosConfig';
 
 // Upload file (multipart form data)
 export const uploadFile = async (formData) => {
   try {
-    console.log('Calling API:', `${API_BASE}/upload`);
-    const response = await fetch(`${API_BASE}/upload`, {
-      method: 'POST',
-      body: formData
-      // Note: Do NOT set Content-Type header for FormData, browser sets it automatically
+    console.log('Calling API: /upload');
+    const response = await api.post('/upload', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
     });
 
-    console.log('Response status:', response.status);
-
-    if (!response.ok) {
-      const error = await response.json().catch(() => ({ 
-        error: { message: `HTTP ${response.status}: Upload failed` } 
-      }));
-      throw new Error(error.error?.message || `HTTP ${response.status}: Upload failed`);
-    }
-
-    const data = await response.json();
-    console.log('Upload successful:', data);
-    return data;
+    console.log('Upload successful:', response.data);
+    return response.data;
   } catch (error) {
     console.error('Upload file error:', error);
-    throw new Error(error.message || 'Network error during file upload');
+    const message = error.response?.data?.error?.message || error.message || 'Network error during file upload';
+    throw new Error(message);
   }
 };
 
 // Upload text (JSON)
 export const uploadText = async (data) => {
   try {
-    console.log('Calling API:', `${API_BASE}/upload`);
-    const response = await fetch(`${API_BASE}/upload`, {
-      method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    });
+    console.log('Calling API: /upload');
+    const response = await api.post('/upload', data);
 
-    console.log('Response status:', response.status);
-
-    if (!response.ok) {
-      const error = await response.json().catch(() => ({ 
-        error: { message: `HTTP ${response.status}: Upload failed` } 
-      }));
-      throw new Error(error.error?.message || `HTTP ${response.status}: Upload failed`);
-    }
-
-    const result = await response.json();
-    console.log('Upload successful:', result);
-    return result;
+    console.log('Upload successful:', response.data);
+    return response.data;
   } catch (error) {
     console.error('Upload text error:', error);
-    throw new Error(error.message || 'Network error during text upload');
+    const message = error.response?.data?.error?.message || error.message || 'Network error during text upload';
+    throw new Error(message);
   }
 };
 
 // Analyze uploaded data
 export const analyzeUpload = async (uploadId, questionnaire) => {
   try {
-    console.log('Calling API:', `${API_BASE}/analyze`);
-    const response = await fetch(`${API_BASE}/analyze`, {
-      method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ uploadId, questionnaire })
+    console.log('Calling API: /analyze');
+    const response = await api.post('/analyze', { 
+      uploadId, 
+      questionnaire 
     });
 
-    if (!response.ok) {
-      const error = await response.json().catch(() => ({ 
-        error: { message: `HTTP ${response.status}: Analysis failed` } 
-      }));
-      throw new Error(error.error?.message || `HTTP ${response.status}: Analysis failed`);
-    }
-
-    return response.json();
+    return response.data;
   } catch (error) {
     console.error('Analyze error:', error);
-    throw new Error(error.message || 'Network error during analysis');
+    const message = error.response?.data?.error?.message || error.message || 'Network error during analysis';
+    throw new Error(message);
   }
 };
 
 // Get report by ID
 export const getReport = async (reportId) => {
   try {
-    const response = await fetch(`${API_BASE}/report/${reportId}`);
-
-    if (!response.ok) {
-      const error = await response.json().catch(() => ({ 
-        error: { message: 'Report not found' } 
-      }));
-      throw new Error(error.error?.message || `HTTP ${response.status}: Report not found`);
-    }
-
-    return response.json();
+    const response = await api.get(`/report/${reportId}`);
+    return response.data;
   } catch (error) {
     console.error('Get report error:', error);
-    throw new Error(error.message || 'Network error fetching report');
+    const message = error.response?.data?.error?.message || error.message || 'Network error fetching report';
+    throw new Error(message);
   }
 };
 
 // Get recent reports (P1 feature)
 export const getRecentReports = async (limit = 10) => {
   try {
-    const response = await fetch(`${API_BASE}/reports?limit=${limit}`);
-
-    if (!response.ok) {
-      const error = await response.json().catch(() => ({ 
-        error: { message: 'Failed to fetch reports' } 
-      }));
-      throw new Error(error.error?.message || `HTTP ${response.status}: Failed to fetch reports`);
-    }
-
-    return response.json();
+    const response = await api.get('/reports', {
+      params: { limit }
+    });
+    return response.data;
   } catch (error) {
     console.error('Get recent reports error:', error);
-    throw new Error(error.message || 'Network error fetching reports');
+    const message = error.response?.data?.error?.message || error.message || 'Network error fetching reports';
+    throw new Error(message);
   }
 };
 
-// ✅ FIXED: Health check also uses port 5000
+// Health check
 export const checkHealth = async () => {
   try {
-    const response = await fetch('http://localhost:8000/health');
-    if (!response.ok) {
-      throw new Error('Server not healthy');
-    }
-    return response.json();
+    const response = await api.get('/health');
+    return response.data;
   } catch (error) {
     console.error('Health check error:', error);
     throw new Error('Server connection failed');
