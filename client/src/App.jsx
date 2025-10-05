@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import StepContext from './components/wizard/StepContext';
-import StepOne from './components/wizard/stepOne';
-import StepTwo from './components/wizard/stepTwo';
-import StepThree from './components/wizard/stepThree';
-import ProgressBar from './components/shared/progressBar';
+import StepOne from './components/wizard/StepOne';
+import StepTwo from './components/wizard/StepTwo';
+import StepThree from './components/wizard/StepThree';
+import ProgressBar from './components/shared/ProgressBar';
 import './App.css';
 
 

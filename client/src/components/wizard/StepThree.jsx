@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { analyzeUpload } from "../../services/api";
-import TablePreview from "../results/tablePreview";
-import CoveragePanel from "../results/coveragePanel";
-import ScoreCard from "../results/scoreCard";
-import RuleFindings from "../results/ruleFindings";
+import TablePreview from "../results/TablePreview";
+import CoveragePanel from "../results/CoveragePanel";
+import ScoreCard from "../results/ScoreCard";
+import RuleFindings from "../results/RuleFindings";
 
 function StepThree({
   uploadId,
