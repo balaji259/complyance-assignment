@@ -21,9 +21,10 @@ const limiter = rateLimit({
 app.use('/api/', limiter);
 
 // CORS configuration
+
 app.use(cors({
-  origin: process.env.CLIENT_URL,
-  credentials: true
+  origin: '*',
+  credentials: false 
 }));
 
 // Body parser
